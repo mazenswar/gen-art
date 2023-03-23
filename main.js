@@ -1,13 +1,19 @@
+import { Chaos } from "./chaos.js";
 import { Line } from "./line.js";
 import { Spiral } from "./spirals.js";
 
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
-canvas.height = 500;
+canvas.height = 800;
 canvas.width = 900;
 
 // global settings
+ctx.shadowOffsetX = 2;
+ctx.shadowOffsetY = 2;
+ctx.shadowColor = "black";
+// ctx.shadowX;
+
 // linear gradient
 const gradient1 = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
 gradient1.addColorStop("0.2", "pink");
@@ -33,7 +39,7 @@ const patternImage = document.getElementById("patternImage");
 const pattern1 = ctx.createPattern(patternImage, "no-repeat");
 
 // stroke
-ctx.strokeStyle = pattern1;
+ctx.strokeStyle = gradient1;
 // lines
 const linesArr = [];
 for (let i = 0; i < 100; i++) {
@@ -41,16 +47,21 @@ for (let i = 0; i < 100; i++) {
 }
 // spirals
 const spiralsArr = [];
-for (let i = 0; i < 200; i++) {
+for (let i = 0; i < 100; i++) {
 	spiralsArr.push(new Spiral(canvas));
+}
+// chaos
+const chaosArr = [];
+for (let i = 0; i < 20; i++) {
+	chaosArr.push(new Chaos(canvas));
 }
 
 // animate
 function animate() {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
-	spiralsArr.forEach((spiral) => {
-		spiral.draw(ctx);
-		spiral.update();
+	chaosArr.forEach((c) => {
+		c.draw(ctx);
+		c.update();
 	});
 	requestAnimationFrame(animate);
 }
