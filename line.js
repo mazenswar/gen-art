@@ -3,9 +3,14 @@ export class Line {
 		this.canvas = canvas;
 		this.x = Math.random() * this.canvas.width;
 		this.y = Math.random() * this.canvas.height;
+		this.speedX = Math.random() * 0.5 + 1;
+		this.speedY = 8;
 		this.lineWidth = Math.floor(Math.random() * 15 + 1);
 		this.hue = Math.floor(Math.random() * 360);
 		this.history = [{ x: this.x, y: this.y }];
+		this.maxLength = Math.random() * 150 + 10;
+		this.lifeSpan = this.maxLength * 10;
+		this.timer = 0;
 	}
 
 	draw(context) {
@@ -19,12 +24,29 @@ export class Line {
 		context.stroke();
 	}
 	update() {
-		this.history.push({
-			x: Math.random() * this.canvas.width,
-			y: Math.random() * this.canvas.height,
-		});
-		if (this.history.length > 10) {
+		this.timer++;
+		if (this.timer < this.lifeSpan) {
+			this.x += this.speedX + Math.random() * 50 - 25;
+			this.y += this.speedY + Math.random() * 50 - 25;
+			// this.x += Math.sin(this.x);
+			// this.y += Math.sin(this.y);
+			this.history.push({
+				x: this.x,
+				y: this.y,
+			});
+			if (this.history.length > this.maxLength) {
+				this.history.shift();
+			}
+		} else if (this.history.length <= 1) {
+			this.reset();
+		} else {
 			this.history.shift();
 		}
+	}
+	reset() {
+		this.x = Math.random() * this.canvas.width;
+		this.y = Math.random() * this.canvas.height;
+		this.history = [{ x: this.x, y: this.y }];
+		this.timer = 0;
 	}
 }
